@@ -1,0 +1,122 @@
+﻿<Window
+    x:Class="Test_SplitView.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Test_SplitView"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid  Height="400" VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- 왼쪽에 있는 글 PaneBackground="LightGreen" -->
+        <Grid Grid.Column="0" Height="400" VerticalAlignment="Top">
+            <SplitView x:Name="splitView" IsPaneOpen="True"
+                   OpenPaneLength="256" CompactPaneLength="128" DisplayMode="Inline"
+                   PanePlacement="Left">
+                
+                <!-- PANE CONTENT Width="256" -->
+                <SplitView.Pane>
+                    <Grid>
+                        <!-- 틀잡기(크기정해주기) -->
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <!-- 안에 들어갈 것 들 -->
+                        <TextBlock Text="PANE CONTENT" x:Name="PaneHeader" Margin="60,12,0,0"/>
+                        <StackPanel Orientation="Vertical" Grid.Row="1" Margin="5,24,0,24" VerticalAlignment="Top">
+                            <ListView x:Name="left_list" SelectionChanged="left_list_SelectionChanged">
+                                <StackPanel Orientation="Horizontal" x:Name="setting">
+                                    <SymbolIcon Symbol="Setting" />
+                                    <TextBlock Text="Settings" Margin="24,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" x:Name="people">
+                                    <SymbolIcon Symbol="People" />
+                                    <TextBlock Text="People" Margin="24,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" x:Name="globe">
+                                    <SymbolIcon Symbol="Globe" />
+                                    <TextBlock Text="Globe" Margin="24,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" x:Name="message">
+                                    <SymbolIcon Symbol="Message" />
+                                    <TextBlock Text="Message" Margin="24,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" x:Name="mail">
+                                    <SymbolIcon Symbol="Mail" />
+                                    <TextBlock Text="Mail" Margin="24,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </ListView>
+                        </StackPanel>
+                    </Grid>
+                </SplitView.Pane>
+
+                <!-- SPLITVIEW CONTENT -->
+                <Grid Background="LightYellow">
+                    <!-- 틀잡기(크기정해주기) -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <!-- 안에 들어갈 것 들 -->
+                    <TextBlock Text="SPLITVIEW CONTENT" Margin="12,12,0,0"/>
+                    <TextBlock x:Name="content" Grid.Row="1" Margin="12,12,0,0" Text=""/>
+                </Grid>
+            </SplitView>
+        </Grid>
+
+
+        <!-- 오른쪽 리스트 Width="196" -->
+        <Grid Grid.Column="1" Background="LightBlue" HorizontalAlignment="Left" >
+            <StackPanel Padding="10">
+                <!-- IsPaneOpen 버튼 -->
+                <ToggleButton x:Name="togglePaneButton" Click="togglePaneButton_Click"
+                              IsChecked="True" Content="IsPaneOpen" />
+
+                <!-- left, right 스위치 -->
+                <ToggleSwitch  x:Name="toggleSwitchLeftRight" OffContent="Left" OnContent="Right" Header="Placement" Toggled="ToggleSwitch_Toggled"
+                            Margin="0,12,0,0" MinWidth="120" />
+
+                <!-- DisplayMode -->
+                <ComboBox x:Name="displayModeCombobox" SelectionChanged="displayModeCombobox_SelectionChanged"
+                            Width="196" SelectedIndex="0" Margin="0,4,0,0" VerticalAlignment="Center" Header="DisplayMode">
+                    <ComboBoxItem x:Name="combo_inline">Inline</ComboBoxItem>
+                    <ComboBoxItem x:Name="combo_compactinline">CompactInline</ComboBoxItem>
+                    <ComboBoxItem x:Name="combo_overlay">Overlay</ComboBoxItem>
+                    <ComboBoxItem x:Name="combo_compactoverlay">CompactOverlay</ComboBoxItem>
+                </ComboBox>
+
+                <!-- paneBackground -->
+                <ComboBox x:Name="paneBackgroundCombobox" Width="196" SelectedIndex="0" VerticalAlignment="Center"
+                            Header="PaneBackground" Margin="0,12,0,0" SelectionChanged="paneBackgroundCombobox_SelectionChanged">
+                    <ComboBoxItem Tag="{}{ThemeResource SystemControlBackgroundChromeMediumLowBrush}">
+                        SystemControlBackgroundChromeMediumLowBrush
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Name="combo_pink" Tag="Red">Pink</ComboBoxItem>
+                    <ComboBoxItem x:Name="combo_blue" Tag="Blue">Blue</ComboBoxItem>
+                    <ComboBoxItem x:Name="combo_green" Tag="Green">Green</ComboBoxItem>
+                </ComboBox>
+
+                <!-- 슬라이더 -->
+                <Slider x:Name="openPaneLengthSlider" Header="OpenPaneLength" Value="256" Minimum="128" Maximum="500"
+                            Width="196" SnapsTo="StepValues" StepFrequency="8" IsFocusEngagementEnabled="False"
+                            ValueChanged="openPaneLengthSlider_ValueChanged"/>
+
+                <Slider x:Name="compactPaneLengthSlider" Header="CompactPaneLength" Value="56" Minimum="24" Maximum="128" 
+                            Width="196" SnapsTo="StepValues" StepFrequency="8" IsFocusEngagementEnabled="False"
+                            ValueChanged="compactPaneLengthSlider_ValueChanged"/>
+            </StackPanel>
+        </Grid>
+        
+    </Grid>
+</Window>
